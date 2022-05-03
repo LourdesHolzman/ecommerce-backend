@@ -2,13 +2,15 @@ const res = require("express/lib/response")
 
 const express = require("express")
 
+const Contenedor = require("../services/productservice")
+const service = new productoservice()
 const {Router} = express
 
 let arrProductos = []
 
 let router = new Router()
 
-router.get("/getAll", (req, res) => {
+router.get("/", (req, res) => {
     res.send({data:arrProductos});
 });
 
@@ -24,6 +26,15 @@ router.post("/create", (req, res) => {
     res.send("Nuevo producto")
 
 });
+
+router.delete("/:id", (req, res) => {
+    const {id} =req.params
+    const deleted =await service.deleteById(id)
+    res.json({
+        message: "deleted",
+        deleted
+    })
+})
 
 
 module.exports = router
