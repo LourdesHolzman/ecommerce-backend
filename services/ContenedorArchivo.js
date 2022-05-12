@@ -1,9 +1,10 @@
 const { promises: fs } = require('fs')
-
+const path = require('path')
 class ContenedorArchivo {
 
     constructor(ruta) {
-        this.ruta = ruta;
+        this.ruta = path.resolve(__dirname,`${ruta}`)
+        console.log(this.ruta)
     }
 
     async listar(id) {

@@ -3,7 +3,7 @@ const { Server: HttpServer } = require('http')
 const { Server: Socket } = require('socket.io');
 const arr = require("./routes/arr");
 const app = express()
-const Contenedor = require("./services/productservice");
+// const Contenedor = require("./services/productservice");
 const ContenedorArchivo = require("./services/ContenedorArchivo")
 
 
@@ -12,8 +12,9 @@ const ContenedorArchivo = require("./services/ContenedorArchivo")
 const httpServer = new HttpServer(app)
 const io = new Socket(httpServer)
 
-const contenedor = new Contenedor()
-const mensajesApi = new ContenedorArchivo("mensajes.json")
+// const contenedor = new Contenedor("../mensajes.json")
+const productosApi = new ContenedorArchivo("../productos.json")
+const mensajesApi = new ContenedorArchivo("../mensajes.json")
 
 
 
@@ -24,12 +25,12 @@ io.on('connection', async socket => {
     console.log('Nuevo cliente conectado!');
 
     // carga inicial de productos
-    socket.emit('productos', contenedor.save());
+    socket.emit('productos', await productosApi.listarAll());
 
     // actualizacion de productos
-    socket.on('update', producto => {
+    socket.on('update', async producto => {
         productosApi.guardar(producto)
-        io.sockets.emit('productos', contenedor.save());
+        io.sockets.emit('productos', await productosApi.listarAll());
     })
 
     // carga inicial de mensajes
