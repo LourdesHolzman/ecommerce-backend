@@ -24,12 +24,12 @@ io.on('connection', async socket => {
     console.log('Nuevo cliente conectado!');
 
     // carga inicial de productos
-    socket.emit('productos', productosApi.listarAll());
+    socket.emit('productos', contenedor.save());
 
     // actualizacion de productos
     socket.on('update', producto => {
         productosApi.guardar(producto)
-        io.sockets.emit('productos', productosApi.listarAll());
+        io.sockets.emit('productos', contenedor.save());
     })
 
     // carga inicial de mensajes
