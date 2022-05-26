@@ -1,10 +1,11 @@
 const express = require("express");
+//const knex = require("./db");
 const { Server: HttpServer } = require('http')
 const { Server: Socket } = require('socket.io');
 const arr = require("./routes/arr");
-const app = express()
+const app = express();
 
-const ContenedorArchivo = require("./services/ContenedorArchivo")
+const ContenedorArchivo = require("./services/ContenedorArchivo");
 
 
 
@@ -61,6 +62,15 @@ app.get("/", (req, res) => {
     res.send({
         message:"Productos",
         data:arr
+    });
+    knex
+    .from("productos")
+    .select("*")
+    .then((json) => {
+      res.send({ data: json });
+    })
+    .catch((err) => {
+      console.log(err);
     });
 });
 
